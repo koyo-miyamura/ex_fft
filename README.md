@@ -1,6 +1,7 @@
 # ExFft
+[![hex.pm version](https://img.shields.io/hexpm/v/ex_fft.svg)](https://hex.pm/packages/ex_fft)
+[![hex.pm](https://img.shields.io/hexpm/l/ex_fft.svg)](https://github.com/koyo-miyamura/ex_fft/LICENSE)
 
-**TODO: Add description**
 Elixir's FFT (Fast Fourier Transform) library
 
 ## Installation
