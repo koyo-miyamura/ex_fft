@@ -9,19 +9,47 @@ defmodule ExFft do
 
   ## Examples
 
-      iex> ExFft.fft(0..7 |> Enum.map(&Math.sin(&1 * Math.pi())))
+      iex> ExFft.fft(0..15 |> Enum.map(&Math.sin(&1 * 2*Math.pi()/16) |> ComplexNum.new()) )
       :ok
 
-      iex> ExFft.fft([0,1])
-      :length2
+      iex> ExFft.fft([ComplexNum.new(2),ComplexNum.new(1)])
+      [ComplexNum.new(3), ComplexNum.new(1)]
 
   """
   def fft(list) when length(list) > 2 do
-    :ok
+    n = length(list)
+    # list = Enum.map(list, &ComplexNum.new(&1))
+
+    even_list = Enum.take_every(list, 2)
+    odd_list = Enum.drop_every(list, 2)
+
+    fe = fft(even_list)
+    fo = fft(odd_list)
+
+    first_half =
+      for i <- 0..(div(n, 2) - 1) do
+        ComplexNum.add(
+          Enum.at(fe, i),
+          ComplexNum.mult(complex_jexp(-2 * Math.pi() / n * i), Enum.at(fo, i))
+        )
+      end
+
+    latter_half =
+      for i <- 0..(div(n, 2) - 1) do
+        ComplexNum.sub(
+          Enum.at(fe, i),
+          ComplexNum.mult(complex_jexp(-2 * Math.pi() / n * i), Enum.at(fo, i))
+        )
+      end
+
+    first_half ++ latter_half
   end
 
   def fft(list) when length(list) == 2 do
-    :length2
+    [
+      Enum.reduce(list, fn x, acc -> ComplexNum.add(acc, x) end),
+      Enum.reduce(list, fn x, acc -> ComplexNum.sub(acc, x) end)
+    ]
   end
 
   @doc """
