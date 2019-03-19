@@ -4,23 +4,24 @@ defmodule ExFft do
   """
 
   @doc """
-  Culculate FFT
+  Culculate FFT for input list.
+  The length of list must be a power of 2
 
   ## Examples
 
-      iex> ExFft.fft(1)
-      :ok1
-
-      iex> ExFft.fft(2)
+      iex> ExFft.fft(0..7 |> Enum.map(&Math.sin(&1 * Math.pi())))
       :ok
 
+      iex> ExFft.fft([0,1])
+      :length2
+
   """
-  def fft(n) when n > 1 do
+  def fft(list) when length(list) > 2 do
     :ok
   end
 
-  def fft(n) when n == 1 do
-    :ok1
+  def fft(list) when length(list) == 2 do
+    :length2
   end
 
   @doc """
@@ -30,9 +31,14 @@ defmodule ExFft do
 
       iex> ExFft.complex_jexp(Math.pi())
       ComplexNum.new(Math.cos(Math.pi()), Math.sin(Math.pi()))
+      iex> ExFft.complex_jexp(0)
+      ComplexNum.new(1.0, 0.0)
 
   """
   def complex_jexp(n) do
     ComplexNum.new(Math.cos(n), Math.sin(n))
   end
 end
+
+# memo
+# Wn はあらかじめ計算しておく
