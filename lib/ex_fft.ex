@@ -14,6 +14,8 @@ defmodule ExFft do
 
       iex> ExFft.fft([ComplexNum.new(2),ComplexNum.new(1)])
       [ComplexNum.new(3), ComplexNum.new(1)]
+      iex> ExFft.fft([2,1])
+      [ComplexNum.new(3), ComplexNum.new(1)]
 
   """
   def fft(list) do
