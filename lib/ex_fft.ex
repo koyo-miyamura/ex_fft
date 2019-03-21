@@ -59,6 +59,26 @@ defmodule ExFft do
   end
 
   @doc """
+    Culculate IFFT for input list.
+
+    ## Examples
+
+      iex>
+
+  """
+  def ifft(list) do
+    list =
+      list
+      |> Enum.map(fn x -> if is_number(x), do: ComplexNum.new(x), else: x end)
+      |> Enum.map(fn x -> ComplexNum.Cartesian.conjugate(x) end)
+
+    list = fft_calc(list)
+
+    n = length(list)
+    Enum.map(list, fn x -> ComplexNum.Cartesian.conjugate(x) |> ComplexNum.div(n) end)
+  end
+
+  @doc """
     Culculate exp(j*n) for input "n".
 
     ## Examples
