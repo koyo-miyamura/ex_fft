@@ -9,17 +9,20 @@ defmodule ExFft do
 
   ## Examples
 
-      iex> ExFft.fft(0..15 |> Enum.map(&Math.sin(&1 * 2*Math.pi()/16) |> ComplexNum.new()) )
+      iex> ExFft.fft(0..15 |> Enum.map(&Math.sin(&1 * 2*Math.pi()/16)))
       :ok
 
       iex> ExFft.fft([ComplexNum.new(2),ComplexNum.new(1)])
       [ComplexNum.new(3), ComplexNum.new(1)]
 
   """
-  def fft(list) when length(list) > 2 do
-    n = length(list)
-    # list = Enum.map(list, &ComplexNum.new(&1))
+  def fft(list) do
+    list = list |> Enum.map(fn x -> if is_number(x), do: ComplexNum.new(x), else: x end)
+    fft_calc(list)
+  end
 
+  defp fft_calc(list) when length(list) > 2 do
+    n = length(list)
     even_list = Enum.take_every(list, 2)
     odd_list = Enum.drop_every(list, 2)
 
@@ -45,7 +48,7 @@ defmodule ExFft do
     first_half ++ latter_half
   end
 
-  def fft(list) when length(list) == 2 do
+  defp fft_calc(list) when length(list) == 2 do
     [
       Enum.reduce(list, fn x, acc -> ComplexNum.add(acc, x) end),
       Enum.reduce(list, fn x, acc -> ComplexNum.sub(acc, x) end)
