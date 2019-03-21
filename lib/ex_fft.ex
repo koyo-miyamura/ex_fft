@@ -79,7 +79,7 @@ defmodule ExFft do
   end
 
   @doc """
-    Culculate exp(j*n) for input "n".
+    Culculate exp(j*n) for input "x" and "x" is a number type.
 
     ## Examples
 
@@ -89,8 +89,8 @@ defmodule ExFft do
       ComplexNum.new(1.0, 0.0)
 
   """
-  def complex_jexp(n) do
-    ComplexNum.new(Math.cos(n), Math.sin(n))
+  def complex_jexp(x) do
+    ComplexNum.new(Math.cos(x), Math.sin(x))
   end
 end
 
