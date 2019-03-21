@@ -5,6 +5,7 @@ defmodule ExFft do
 
   @doc """
   Culculate FFT for input list.
+  List member's type must be number or ComplexNum
   The length of list must be a power of 2
 
   ## Examples
