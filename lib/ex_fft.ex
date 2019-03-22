@@ -20,17 +20,15 @@ defmodule ExFft do
 
   """
   def fft(list) do
-    list = list |> Enum.map(fn x -> if is_number(x), do: ComplexNum.new(x), else: x end)
-    fft_calc(list)
+    list
+    |> Enum.map(fn x -> if is_number(x), do: ComplexNum.new(x), else: x end)
+    |> fft_calc()
   end
 
   defp fft_calc(list) when length(list) > 2 do
     n = length(list)
-    even_list = Enum.take_every(list, 2)
-    odd_list = Enum.drop_every(list, 2)
-
-    fe = fft(even_list)
-    fo = fft(odd_list)
+    fe = Enum.take_every(list, 2) |> fft_calc()
+    fo = Enum.drop_every(list, 2) |> fft_calc()
 
     first_half =
       for i <- 0..(div(n, 2) - 1) do
