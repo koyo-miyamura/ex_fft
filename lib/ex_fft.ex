@@ -63,19 +63,20 @@ defmodule ExFft do
 
     ## Examples
 
-      iex>
+      iex> ExFft.ifft([ComplexNum.new(2), ComplexNum.new(1)])
+      [ComplexNum.new(1.5,0.0), ComplexNum.new(0.5,0.0)]
+      iex> ExFft.ifft([2,1])
+      [ComplexNum.new(1.5,0.0), ComplexNum.new(0.5,0.0)]
 
   """
   def ifft(list) do
-    list =
-      list
-      |> Enum.map(fn x -> if is_number(x), do: ComplexNum.new(x), else: x end)
-      |> Enum.map(fn x -> ComplexNum.Cartesian.conjugate(x) end)
-
-    list = fft_calc(list)
-
     n = length(list)
-    Enum.map(list, fn x -> ComplexNum.Cartesian.conjugate(x) |> ComplexNum.div(n) end)
+
+    list
+    |> Enum.map(fn x -> if is_number(x), do: ComplexNum.new(x), else: x end)
+    |> Enum.map(fn x -> ComplexNum.Cartesian.conjugate(x) end)
+    |> fft_calc()
+    |> Enum.map(fn x -> ComplexNum.Cartesian.conjugate(x) |> ComplexNum.div(n) end)
   end
 
   @doc """
