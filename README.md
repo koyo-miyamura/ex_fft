@@ -21,3 +21,4 @@ Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_do
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at [https://hexdocs.pm/ex_fft](https://hexdocs.pm/ex_fft).
 
+If you want to compare with DFT, access `ex_fft_test.exs`, copy `dft` function, paste it in `ex_fft.ex`, and run `iex -S mix`
