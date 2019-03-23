@@ -4,16 +4,20 @@ defmodule ExFft do
   """
 
   @doc """
-  Culculate FFT for input list.
-  List member's type must be number or ComplexNum
-  The length of list must be a power of 2
+  Culculate FFT for input list \n
+  List member's type must be number or ComplexNum \n
+  The length of list must be a power of 2 \n
+  if norm is :ortho, transform will be scaled by 1/Math.sqrt(length(list))
 
   ## Examples
 
-      iex> ExFft.fft([ComplexNum.new(2),ComplexNum.new(1)])
-      [ComplexNum.new(3), ComplexNum.new(1)]
       iex> ExFft.fft([2,1])
       [ComplexNum.new(3), ComplexNum.new(1)]
+      iex> ExFft.fft([ComplexNum.new(2),ComplexNum.new(1)])
+      [ComplexNum.new(3), ComplexNum.new(1)]
+
+      iex> ExFft.fft([2,1], :ortho)
+      [ComplexNum.new(2.1213203435596424, 0.0), ComplexNum.new(0.7071067811865475, 0.0)]
 
       iex> list = 0..15 |> Enum.map(fn x -> Math.sin(x * 2*Math.pi()/16) |> Float.round(3) end)
       iex> list_fft_ifft =
@@ -24,10 +28,17 @@ defmodule ExFft do
       true
 
   """
-  def fft(list) do
-    list
-    |> Enum.map(fn x -> if is_number(x), do: ComplexNum.new(x), else: x end)
-    |> fft_calc()
+  @spec fft([number | ComplexNum], :none | :ortho) :: [ComplexNum]
+  def fft(list, norm \\ :none) do
+    list =
+      list
+      |> Enum.map(fn x -> if is_number(x), do: ComplexNum.new(x), else: x end)
+      |> fft_calc()
+
+    case norm do
+      :none -> list
+      :ortho -> Enum.map(list, fn x -> ComplexNum.div(x, Math.sqrt(length(list))) end)
+    end
   end
 
   defp fft_calc(list) when length(list) > 2 do
@@ -62,24 +73,33 @@ defmodule ExFft do
   end
 
   @doc """
-    Culculate IFFT for input list.
+    Culculate IFFT for input list. \n
+    if norm is :ortho, transform will be scaled by 1/Math.sqrt(length(list)), else 1/length(list)
 
     ## Examples
 
-      iex> ExFft.ifft([ComplexNum.new(2), ComplexNum.new(1)])
-      [ComplexNum.new(1.5,0.0), ComplexNum.new(0.5,0.0)]
       iex> ExFft.ifft([2,1])
       [ComplexNum.new(1.5,0.0), ComplexNum.new(0.5,0.0)]
+      iex> ExFft.ifft([ComplexNum.new(2), ComplexNum.new(1)])
+      [ComplexNum.new(1.5,0.0), ComplexNum.new(0.5,0.0)]
+
+      iex> ExFft.ifft([2,1], :ortho)
+      [ComplexNum.new(2.1213203435596424,0.0), ComplexNum.new(0.7071067811865475,0.0)]
 
   """
-  def ifft(list) do
-    n = length(list)
+  @spec ifft([number | ComplexNum], :none | :ortho) :: [ComplexNum]
+  def ifft(list, norm \\ :none) do
+    coef =
+      case norm do
+        :none -> length(list)
+        :ortho -> Math.sqrt(length(list))
+      end
 
     list
     |> Enum.map(fn x -> if is_number(x), do: ComplexNum.new(x), else: x end)
     |> Enum.map(fn x -> ComplexNum.Cartesian.conjugate(x) end)
     |> fft_calc()
-    |> Enum.map(fn x -> ComplexNum.Cartesian.conjugate(x) |> ComplexNum.div(n) end)
+    |> Enum.map(fn x -> ComplexNum.Cartesian.conjugate(x) |> ComplexNum.div(coef) end)
   end
 
   @doc """
