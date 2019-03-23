@@ -10,13 +10,18 @@ defmodule ExFft do
 
   ## Examples
 
-      iex> ExFft.fft(0..15 |> Enum.map(&Math.sin(&1 * 2*Math.pi()/16)))
-      :ok
-
       iex> ExFft.fft([ComplexNum.new(2),ComplexNum.new(1)])
       [ComplexNum.new(3), ComplexNum.new(1)]
       iex> ExFft.fft([2,1])
       [ComplexNum.new(3), ComplexNum.new(1)]
+
+      iex> list = 0..15 |> Enum.map(fn x -> Math.sin(x * 2*Math.pi()/16) |> Float.round(3) end)
+      iex> list_fft_ifft =
+      ...> list
+      ...> |> ExFft.fft() |> ExFft.ifft()
+      ...> |> Enum.map(fn x -> ComplexNum.Cartesian.real(x) |> Float.round(3) end)
+      iex> Keyword.equal?(list, list_fft_ifft)
+      true
 
   """
   def fft(list) do
