@@ -1,13 +1,13 @@
 defmodule ExFft do
   @moduledoc """
-  Documentation for ExFft.
+  ExFft is module for FFT (Fast Fourier Transform)
   """
 
   @doc """
-  Culculate FFT for input list \n
-  List member's type must be number or ComplexNum \n
-  The length of list must be a power of 2 \n
-  if norm is :ortho, transform will be scaled by 1/Math.sqrt(length(list))
+  Calculate FFT for input `list` \n
+  List member's type must be number or `ComplexNum` \n
+  The length of `list` must be a power of 2 \n
+  if `norm` is `:ortho`, transform will be scaled by `1/Math.sqrt(length(list))`
 
   ## Examples
 
@@ -73,10 +73,10 @@ defmodule ExFft do
   end
 
   @doc """
-    Culculate IFFT for input list. \n
-    if norm is :ortho, transform will be scaled by 1/Math.sqrt(length(list)), else 1/length(list)
+  Calculate IFFT for input `list` \n
+  if `norm` is `:ortho`, transform will be scaled by `1/Math.sqrt(length(list))`, else `1/length(list)`
 
-    ## Examples
+  ## Examples
 
       iex> ExFft.ifft([2,1])
       [ComplexNum.new(1.5,0.0), ComplexNum.new(0.5,0.0)]
@@ -103,9 +103,9 @@ defmodule ExFft do
   end
 
   @doc """
-    Culculate exp(j*n) for input "x" and "x" is a number type.
+  Calculate `exp(j*n)` for input `x` and `x` is a number type.
 
-    ## Examples
+  ## Examples
 
       iex> ExFft.complex_jexp(Math.pi())
       ComplexNum.new(Math.cos(Math.pi()), Math.sin(Math.pi()))
