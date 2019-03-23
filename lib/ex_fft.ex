@@ -96,17 +96,4 @@ defmodule ExFft do
   def complex_jexp(x) do
     ComplexNum.new(Math.cos(x), Math.sin(x))
   end
-
-  def dft(list) do
-    n = length(list)
-
-    Enum.map(list, fn x -> if is_number(x), do: ComplexNum.new(x), else: x end)
-
-    for k <- 0..(n - 1) do
-      for i <- 0..(n - 1) do
-        ComplexNum.mult(complex_jexp(-2 * Math.pi() / n * i * k), Enum.at(list, i))
-      end
-      |> Enum.reduce(fn x, acc -> ComplexNum.add(x, acc) end)
-    end
-  end
 end
