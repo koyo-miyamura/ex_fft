@@ -12,7 +12,7 @@ by adding `ex_fft` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:ex_fft, "~> 0.1.0"}
+    {:ex_fft, "~> 0.2.0"}
   ]
 end
 ```
